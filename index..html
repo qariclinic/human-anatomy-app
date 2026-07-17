@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اناٹومی و طب — انسانی جسم</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&family=Noto+Naskh+Arabic:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green-deep:#0b4a3d;
+    --green-mid:#12664f;
+    --gold:#c9a24b;
+    --gold-soft:#e6d3a0;
+    --cream:#faf5e9;
+    --cream-2:#f2e9d5;
+    --ink:#1c1b16;
+    --ink-soft:#4a463c;
+    --maroon:#7a2e2e;
+    --line:#d8c88f;
+    --radius-arch: 999px 999px 14px 14px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(circle at 50% 0%, #113f34 0%, var(--green-deep) 45%, #08302760 100%),
+      var(--green-deep);
+    font-family:'Noto Naskh Arabic','Noto Nastaliq Urdu',serif;
+    color:var(--ink);
+    min-height:100vh;
+    padding:0;
+  }
+  .app-shell{
+    max-width:520px;
+    margin:0 auto;
+    min-height:100vh;
+    background:var(--cream);
+    position:relative;
+    box-shadow:0 0 60px rgba(0,0,0,.45);
+    overflow:hidden;
+  }
+
+  /* ---------- Header ---------- */
+  .app-header{
+    background:
+      linear-gradient(180deg, var(--green-deep) 0%, var(--green-mid) 100%);
+    padding:26px 20px 34px;
+    text-align:center;
+    position:relative;
+    border-bottom:3px solid var(--gold);
+  }
+  .app-header::after{
+    content:"";
+    position:absolute;
+    bottom:-2px; left:0; right:0;
+    height:14px;
+    background:
+      radial-gradient(circle at 10px 0, transparent 10px, var(--cream) 11px) 0 -10px/28px 20px repeat-x;
+  }
+  .medallion{
+    width:54px;height:54px;margin:0 auto 8px;
+    border:2px solid var(--gold);
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:radial-gradient(circle, #ffffff12, transparent);
+    color:var(--gold);
+    font-size:26px;
+  }
+  .app-title{
+    font-family:'Noto Nastaliq Urdu',serif;
+    color:var(--gold-soft);
+    font-size:26px;
+    margin:4px 0 2px;
+    font-weight:700;
+  }
+  .app-subtitle{
+    color:#dce9e3;
+    font-size:13.5px;
+    margin:0;
+    opacity:.9;
+  }
+  .app-credit{
+    margin-top:10px;
+    font-size:11.5px;
+    color:var(--gold-soft);
+    letter-spacing:.3px;
+    opacity:.85;
+  }
+
+  /* ---------- Search / intro strip ---------- */
+  .intro-strip{
+    padding:16px 18px 4px;
+    color:var(--ink-soft);
+    font-size:13.5px;
+    line-height:2;
+    text-align:center;
+  }
+
+  /* ---------- Grid Menu (android style) ---------- */
+  .menu-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:14px;
+    padding:16px 18px 30px;
+  }
+  .menu-tile{
+    background:linear-gradient(180deg,#ffffff, var(--cream-2));
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:14px 6px 10px;
+    text-align:center;
+    cursor:pointer;
+    transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+    display:flex;flex-direction:column;align-items:center;gap:6px;
+    position:relative;
+  }
+  .menu-tile:hover, .menu-tile:focus-visible{
+    transform:translateY(-3px);
+    box-shadow:0 8px 18px rgba(11,74,61,.18);
+    border-color:var(--gold);
+    outline:none;
+  }
+  .menu-tile .icon{
+    width:42px;height:42px;
+    border-radius:50%;
+    background:linear-gradient(160deg, var(--green-mid), var(--green-deep));
+    color:var(--gold-soft);
+    display:flex;align-items:center;justify-content:center;
+    font-size:20px;
+    border:1.5px solid var(--gold);
+  }
+  .menu-tile .label{
+    font-size:13px;
+    font-weight:600;
+    color:var(--ink);
+    font-family:'Noto Nastaliq Urdu',serif;
+  }
+
+  /* ---------- Detail View ---------- */
+  .detail-view{
+    display:none;
+    padding:0 0 30px;
+  }
+  .detail-view.active{display:block;}
+  .menu-view.hidden{display:none;}
+
+  .detail-top{
+    background:linear-gradient(180deg, var(--green-deep), var(--green-mid));
+    padding:16px 18px 40px;
+    text-align:center;
+    position:relative;
+    border-bottom:3px solid var(--gold);
+  }
+  .detail-top::after{
+    content:"";
+    position:absolute;
+    bottom:-2px; left:0; right:0;
+    height:14px;
+    background:
+      radial-gradient(circle at 10px 0, transparent 10px, var(--cream) 11px) 0 -10px/28px 20px repeat-x;
+  }
+  .back-btn{
+    position:absolute;
+    top:14px; right:16px;
+    background:rgba(255,255,255,.08);
+    border:1px solid var(--gold-soft);
+    color:var(--gold-soft);
+    padding:6px 14px;
+    border-radius:20px;
+    font-size:12.5px;
+    cursor:pointer;
+    font-family:'Noto Naskh Arabic', serif;
+  }
+  .back-btn:hover{background:rgba(255,255,255,.16);}
+
+  .arch-frame{
+    width:88px;height:104px;
+    margin:6px auto 10px;
+    border:2px solid var(--gold);
+    border-radius:var(--radius-arch);
+    display:flex;align-items:center;justify-content:center;
+    background:radial-gradient(circle at 50% 30%, #ffffff14, transparent 70%);
+    font-size:34px;
+    color:var(--gold-soft);
+  }
+  .detail-title{
+    font-family:'Noto Nastaliq Urdu',serif;
+    color:var(--gold-soft);
+    font-size:23px;
+    font-weight:700;
+    margin:0;
+  }
+  .detail-eng{
+    color:#cfe3da;
+    font-size:12px;
+    opacity:.85;
+    margin-top:2px;
+  }
+
+  .detail-body{
+    padding:0 18px;
+    margin-top:-18px;
+  }
+  .card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:16px 16px 14px;
+    margin-top:16px;
+    box-shadow:0 4px 14px rgba(11,74,61,.06);
+  }
+  .card h3{
+    font-family:'Noto Nastaliq Urdu',serif;
+    color:var(--green-deep);
+    font-size:17px;
+    margin:0 0 8px;
+    padding-bottom:8px;
+    border-bottom:1px dashed var(--line);
+    display:flex;align-items:center;gap:8px;
+  }
+  .card h3 .tag{
+    width:8px;height:8px;border-radius:50%;
+    background:var(--gold);
+    display:inline-block;
+  }
+  .card p{
+    font-size:14.5px;
+    line-height:2.1;
+    color:var(--ink-soft);
+    margin:0 0 10px;
+  }
+  .card p:last-child{margin-bottom:0;}
+  .card ul{
+    margin:0 0 6px;
+    padding-inline-start:20px;
+    font-size:14px;
+    line-height:2;
+    color:var(--ink-soft);
+  }
+  .card.symptoms{border-inline-start:4px solid var(--maroon);}
+  .card.research{border-inline-start:4px solid var(--green-mid);}
+  .card.prevent{border-inline-start:4px solid var(--gold);}
+
+  .disease-block{
+    margin-bottom:14px;
+    padding-bottom:12px;
+    border-bottom:1px solid #f0e9d4;
+  }
+  .disease-block:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+  .disease-block h4{
+    margin:0 0 4px;
+    font-size:15px;
+    color:var(--maroon);
+    font-family:'Noto Nastaliq Urdu',serif;
+  }
+
+  .footer-note{
+    text-align:center;
+    font-size:11.5px;
+    color:#9a927a;
+    padding:22px 20px 6px;
+  }
+
+  @media (max-width:380px){
+    .app-title{font-size:22px;}
+    .menu-grid{gap:10px;padding:14px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- ===================== MENU (HOME) VIEW ===================== -->
+  <div class="menu-view" id="menuView">
+    <div class="app-header">
+      <div class="medallion">☾</div>
+      <div class="app-title">اناٹومی و طب</div>
+      <p class="app-subtitle">انسانی جسم کے اعضاء کی مکمل معلومات و تحقیق</p>
+      <div class="app-credit">میڈ بائے حافظ محمد شعیب خان آلائی</div>
+    </div>
+
+    <div class="intro-strip">
+      نیچے دیے گئے کسی بھی عضو پر کلک کریں — تعارف، عام امراض و علامات، سائنسی تحقیق اور احتیاطی تدابیر کی تفصیل کھل جائے گی۔
+    </div>
+
+    <div class="menu-grid" id="menuGrid"><!-- injected by JS --></div>
+
+    <div class="footer-note">
+      یہ مواد عمومی طبی و سائنسی معلومات کے لیے ہے، ذاتی تشخیص یا علاج کے لیے کسی مستند معالج سے رجوع کریں۔
+    </div>
+  </div>
+
+  <!-- ===================== DETAIL VIEW ===================== -->
+  <div class="detail-view" id="detailView">
+    <div class="detail-top">
+      <button class="back-btn" id="backBtn">↩ واپس مینو</button>
+      <div class="arch-frame" id="detailIcon">🫀</div>
+      <h1 class="detail-title" id="detailTitle">—</h1>
+      <div class="detail-eng" id="detailEng">—</div>
+    </div>
+    <div class="detail-body" id="detailBody"><!-- injected by JS --></div>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   DATA MODEL
+   ہر عضو کا مکمل ریکارڈ نیچے دیے گئے آبجیکٹ میں موجود ہے۔
+   نیا عضو / فیچر شامل کرنے کے لیے نیچے "ORGANS" ارے میں
+   بالکل اسی طرز کا ایک نیا آبجیکٹ شامل کریں۔ تفصیل کمنٹ میں ہے۔
+   ============================================================ */
+const ORGANS = [
+  {
+    id:"brain",
+    icon:"🧠",
+    label:"سر و دماغ",
+    eng:"Head & Brain",
+    intro:"دماغ انسانی جسم کا مرکزی کنٹرول سسٹم ہے جو اعصابی نظام کے ذریعے پورے جسم کی حرکات، احساسات، سوچ اور یادداشت کو کنٹرول کرتا ہے۔ سر میں دماغ کے علاوہ خون کی نالیاں، اعصاب اور کھوپڑی کی ہڈیاں شامل ہیں۔",
+    diseases:[
+      {name:"سر درد (Headache)", text:"سر درد کی کئی اقسام ہیں: ٹینشن ہیڈک (ذہنی دباؤ سے)، مائیگرین (آدھے سر کا شدید دھڑکتا درد، اکثر متلی و روشنی سے حساسیت کے ساتھ)، اور کلسٹر ہیڈک (ایک آنکھ کے گرد شدید درد)۔ اسباب میں نیند کی کمی، پانی کی کمی، ذہنی دباؤ، آنکھوں کی کمزوری اور بلڈ پریشر شامل ہیں۔"},
+      {name:"دماغی و نفسیاتی امراض", text:"ڈپریشن، اینگزائٹی (بے چینی)، مرگی (Epilepsy)، فالج (Stroke)، اور ڈیمنشیا (یادداشت کی بتدریج کمزوری) عام دماغی امراض ہیں۔ نفسیاتی امراض میں کیمیائی عدم توازن (سیروٹونن، ڈوپامین)، ماحولیاتی دباؤ اور موروثی عوامل کردار ادا کرتے ہیں۔"}
+    ],
+    research:"جدید نیورو سائنس تحقیق سے معلوم ہوا ہے کہ دماغ میں 'نیوروپلاسٹیسٹی' کی صلاحیت ہوتی ہے، یعنی نئے تجربات اور سیکھنے سے دماغی خلیات نئے رابطے بنا سکتے ہیں۔ MRI اور fMRI اسکینز کی مدد سے مائیگرین اور ڈپریشن کے دوران دماغ کی سرگرمی کا مطالعہ جاری ہے، جس سے علاج کے نئے طریقے دریافت ہو رہے ہیں۔",
+    prevention:["روزانہ 7 سے 8 گھنٹے نیند", "کافی پانی پینا", "اسکرین کا وقفے وقفے سے استعمال", "ذہنی دباؤ کم کرنے کے لیے مراقبہ یا ورزش", "شدید یا مسلسل سر درد کی صورت میں معالج سے رجوع"]
+  },
+  {
+    id:"skin",
+    icon:"🌿",
+    label:"جلد",
+    eng:"Skin",
+    intro:"جلد جسم کا سب سے بڑا عضو ہے جو حفاظتی تہہ، درجہ حرارت کے کنٹرول اور حسی احساس کا کام دیتی ہے۔ اس میں تین بنیادی تہیں ہیں: ایپیڈرمس، ڈرمس اور سب کیوٹینیئس تہہ۔",
+    diseases:[
+      {name:"داغ دھبے (Skin Pigmentation)", text:"چہرے یا جسم پر سیاہ داغ (میلازما، ہائپر پگمنٹیشن) دھوپ کی زیادتی، ہارمونی تبدیلی یا مہاسوں کے بعد نشان کی صورت میں بنتے ہیں۔ سفید داغ (وٹیلیگو) میں جلد کے میلانین بنانے والے خلیات ختم ہو جاتے ہیں۔"},
+      {name:"دیگر جلدی امراض", text:"ایگزیما، چنبل (Psoriasis) اور فنگل انفیکشن عام جلدی مسائل ہیں جن میں خارش، سرخی اور خشکی نمایاں علامات ہیں۔"}
+    ],
+    research:"ڈرماٹولوجی میں تحقیق سے معلوم ہوا ہے کہ سورج کی الٹراوائلٹ شعاعیں (UV) جلد کے میلانین کی پیداوار بڑھا کر داغ دھبوں کا باعث بنتی ہیں۔ جدید علاج میں لیزر تھراپی اور ٹاپیکل ریٹینوئڈز کا استعمال بڑھ رہا ہے۔",
+    prevention:["دھوپ میں سن اسکرین کا استعمال", "متوازن غذا اور وٹامن سی و ای کا استعمال", "جلد کو نمی بخشنا", "مہاسوں کو دبانے سے گریز"]
+  },
+  {
+    id:"eyes",
+    icon:"👁",
+    label:"آنکھیں",
+    eng:"Eyes",
+    intro:"آنکھ ایک حساس بصری عضو ہے جو روشنی کو برقی سگنلز میں تبدیل کر کے دماغ تک پہنچاتی ہے۔ اس میں قرنیہ، عدسہ، ریٹینا اور بصری اعصاب شامل ہیں۔",
+    diseases:[
+      {name:"موتیا بند (Cataract)", text:"آنکھ کے قدرتی عدسے کا دھندلا ہو جانا، عام طور پر عمر بڑھنے کے ساتھ ہوتا ہے اور بینائی کو دھندلا کر دیتا ہے۔"},
+      {name:"گلوکوما", text:"آنکھ کے اندر دباؤ بڑھنے سے بصری اعصاب کو نقصان پہنچتا ہے، جو بتدریج بینائی کے ضائع ہونے کا باعث بن سکتا ہے۔"},
+      {name:"عینک/نظر کی کمزوری", text:"قربی نظری (Myopia) اور بعید نظری (Hypermetropia) عام بصری مسائل ہیں جن میں عدسے کی شکل یا آنکھ کی لمبائی کی وجہ سے تصویر ریٹینا پر صحیح جگہ نہیں بنتی۔"}
+    ],
+    research:"آپتھلمولوجی میں جدید تحقیق سے لیزر (LASIK) سرجری اور مصنوعی عدسے کی پیوند کاری میں نمایاں بہتری آئی ہے۔ ریٹینا کے امراض پر جین تھراپی کی تحقیق بھی جاری ہے۔",
+    prevention:["اسکرین کے استعمال میں وقفہ (20-20-20 اصول)", "سالانہ آنکھوں کا معائنہ", "دھوپ میں سن گلاسز کا استعمال", "وٹامن اے سے بھرپور غذا"]
+  },
+  {
+    id:"ears",
+    icon:"👂",
+    label:"کان",
+    eng:"Ears",
+    intro:"کان سننے اور جسمانی توازن قائم رکھنے کا عضو ہے۔ اس کے تین حصے ہیں: بیرونی کان، درمیانی کان اور اندرونی کان۔",
+    diseases:[
+      {name:"کان کا انفیکشن (Otitis)", text:"بیکٹیریا یا وائرس سے درمیانی کان کی سوزش، جو خصوصاً بچوں میں عام ہے اور درد و بخار کا باعث بنتی ہے۔"},
+      {name:"سماعت کی کمزوری", text:"عمر بڑھنے، مسلسل شور یا اندرونی کان کے بالوں جیسے خلیات کے متاثر ہونے سے سماعت متاثر ہوتی ہے۔"},
+      {name:"کانوں کی گھنٹی بجنا (Tinnitus)", text:"بغیر بیرونی آواز کے کان میں گھنٹی یا سیٹی کی آواز محسوس ہونا، جو اکثر شور یا اعصابی مسئلے کی علامت ہوتی ہے۔"}
+    ],
+    research:"آڈیالوجی تحقیق میں کوکلیئر امپلانٹ ٹیکنالوجی نے شدید بہرے پن کے شکار افراد کے لیے سننے کی صلاحیت بحال کرنے میں انقلاب برپا کیا ہے۔",
+    prevention:["تیز آواز سے بچاؤ", "کان میں نوکیلی اشیاء نہ ڈالنا", "کان میں نمی و انفیکشن کی صورت میں فوری معالج سے رجوع", "باقاعدہ صفائی مگر احتیاط سے"]
+  },
+  {
+    id:"nose",
+    icon:"👃",
+    label:"ناک",
+    eng:"Nose",
+    intro:"ناک سانس کے نظام کا داخلی راستہ اور سونگھنے کا عضو ہے۔ یہ ہوا کو فلٹر، گرم اور نم کرتی ہے۔",
+    diseases:[
+      {name:"ناک کی الرجی (Allergic Rhinitis)", text:"دھول، جرگ یا دیگر الرجن سے ناک بند ہونا، چھینکیں اور بہاؤ کی علامات۔"},
+      {name:"سائنوسائٹس", text:"ناک کے اردگرد ہڈیوں کے خلاؤں (Sinuses) کی سوزش، جو سر درد اور دباؤ کا باعث بنتی ہے۔"},
+      {name:"ناک بند ہونا / پولپس", text:"ناک کے اندر گوشت بڑھنے (Nasal Polyps) سے سانس لینے میں دشواری ہو سکتی ہے۔"}
+    ],
+    research:"تحقیق سے معلوم ہوا ہے کہ ناک کے اندرونی سیلیا (باریک بال نما ساخت) ہوا کو صاف کرنے میں کلیدی کردار ادا کرتے ہیں، اور فضائی آلودگی ان کے کام کو متاثر کرتی ہے۔",
+    prevention:["الرجن سے بچاؤ", "نمکین پانی سے ناک کی صفائی (Saline rinse)", "دھوئیں اور آلودگی سے دوری", "خشک موسم میں ہوا میں نمی برقرار رکھنا"]
+  },
+  {
+    id:"face",
+    icon:"😊",
+    label:"چہرہ",
+    eng:"Face",
+    intro:"چہرہ کئی عضلات، اعصاب اور غدود پر مشتمل ہے جو تاثرات، چبانے اور بولنے میں مدد دیتے ہیں۔ چہرے کے اعصاب (Facial Nerve) حسیات اور حرکت دونوں کو کنٹرول کرتے ہیں۔",
+    diseases:[
+      {name:"فالج چہرہ (Bell's Palsy)", text:"چہرے کے ایک طرف کے اعصاب کی اچانک کمزوری یا فالج، جس سے چہرہ ایک طرف کو لٹک جاتا ہے۔"},
+      {name:"مہاسے (Acne)", text:"جلد کے مساموں میں تیل اور بیکٹیریا جمع ہونے سے چہرے پر دانے نکلنا، خصوصاً نوجوانی میں عام۔"}
+    ],
+    research:"نیورولوجی تحقیق سے چہرے کے فالج کے 70-80% کیسز میں ابتدائی سٹیرائیڈ علاج سے مکمل بحالی ممکن ہونے کے شواہد ملے ہیں۔",
+    prevention:["چہرے کو صاف رکھنا", "ٹھنڈی ہوا/ڈرافٹ سے براہ راست بچاؤ", "متوازن غذا", "بروقت معالج سے رجوع اگر چہرے میں بے حسی یا کمزوری محسوس ہو"]
+  },
+  {
+    id:"tongue",
+    icon:"👅",
+    label:"زبان",
+    eng:"Tongue",
+    intro:"زبان ذائقہ محسوس کرنے، چبانے اور بولنے میں مدد دینے والا عضلاتی عضو ہے، جس پر ذائقے کے چھوٹے چھوٹے غدود (Taste Buds) موجود ہوتے ہیں۔",
+    diseases:[
+      {name:"زبان کے چھالے (Ulcers)", text:"وٹامن کی کمی، تیزابیت یا دباؤ کے باعث زبان یا منہ میں دردناک چھالے بننا۔"},
+      {name:"زبان پر تہہ جمنا", text:"سفید یا زرد تہہ عموماً منہ کی صفائی کی کمی، فنگل انفیکشن یا نظام ہاضمہ کے مسائل کی علامت ہو سکتی ہے۔"}
+    ],
+    research:"تحقیق سے ذائقے کے ادراک (Taste Perception) اور جسمانی صحت جیسے شوگر کی سطح کے مابین تعلق پر مطالعہ جاری ہے۔",
+    prevention:["منہ کی روزانہ صفائی", "متوازن غذا اور وٹامن بی/سی کی مقدار", "زیادہ مصالحہ دار و گرم اشیاء سے احتیاط"]
+  },
+  {
+    id:"throat",
+    icon:"🗣",
+    label:"گلا",
+    eng:"Throat",
+    intro:"گلا سانس اور خوراک دونوں کے راستے کا مشترکہ حصہ ہے، جس میں حلق، حنجرہ (آواز کی نالی) اور ٹانسلز شامل ہیں۔",
+    diseases:[
+      {name:"گلے کی سوزش (Pharyngitis)", text:"وائرل یا بیکٹیریل انفیکشن سے گلے میں درد، خراش اور نگلنے میں دشواری۔"},
+      {name:"ٹانسلز کی سوزش", text:"ٹانسلز کا سوجنا اور درد، جو اکثر بخار کے ساتھ ہوتا ہے۔"}
+    ],
+    research:"طبی تحقیق سے معلوم ہوا ہے کہ زیادہ تر گلے کی سوزش وائرل ہوتی ہے اور غیر ضروری اینٹی بائیوٹک کا استعمال مزاحمت (Resistance) بڑھا سکتا ہے۔",
+    prevention:["نیم گرم نمکین پانی سے غرارے", "کافی پانی پینا", "دھوئیں اور آلودگی سے بچاؤ", "آواز کا زیادہ استعمال کم کرنا"]
+  },
+  {
+    id:"chest",
+    icon:"🫁",
+    label:"چھاتی و پھیپھڑے",
+    eng:"Chest & Lungs",
+    intro:"پھیپھڑے سانس کے نظام کا مرکزی عضو ہیں جو آکسیجن جذب اور کاربن ڈائی آکسائیڈ خارج کرتے ہیں۔ سینے میں دل، پھیپھڑے اور بڑی خون کی نالیاں محفوظ ہیں۔",
+    diseases:[
+      {name:"دمہ (Asthma)", text:"سانس کی نالیوں کا تنگ ہونا جس سے سانس لینے میں دشواری، سیٹی کی آواز اور کھانسی ہوتی ہے۔"},
+      {name:"نمونیا", text:"پھیپھڑوں میں انفیکشن سے سوزش، بخار اور سانس میں دشواری۔"},
+      {name:"دائمی برونکائٹس / COPD", text:"طویل المدت تمباکو نوشی یا آلودگی سے سانس کی نالیوں کا مستقل نقصان۔"}
+    ],
+    research:"سانس کی بیماریوں پر عالمی تحقیق سے فضائی آلودگی اور تمباکو نوشی کو دمہ اور COPD کی بڑھتی شرح کی بنیادی وجہ قرار دیا گیا ہے۔",
+    prevention:["تمباکو نوشی سے مکمل پرہیز", "آلودہ ماحول سے بچاؤ", "باقاعدہ ورزش اور گہری سانس کی مشقیں", "فلو ویکسینیشن"]
+  },
+  {
+    id:"heart",
+    icon:"🫀",
+    label:"دل",
+    eng:"Heart",
+    intro:"دل ایک عضلاتی پمپ ہے جو خون کو پورے جسم میں گردش دیتا ہے۔ یہ چار خانوں (Chambers) پر مشتمل ہے اور روزانہ تقریباً ایک لاکھ بار دھڑکتا ہے۔",
+    diseases:[
+      {name:"ہائی بلڈ پریشر", text:"شریانوں میں خون کا دباؤ معمول سے زیادہ ہونا، جو دل اور گردوں کو نقصان پہنچا سکتا ہے۔"},
+      {name:"امراضِ قلب (Coronary Artery Disease)", text:"دل کو خون فراہم کرنے والی شریانوں کا تنگ ہونا، جو سینے کے درد (انجائنا) اور دل کے دورے کا باعث بن سکتا ہے۔"},
+      {name:"دل کی دھڑکن کی بے ترتیبی (Arrhythmia)", text:"دل کی دھڑکن کا معمول سے تیز، سست یا بے ترتیب ہونا۔"}
+    ],
+    research:"عالمی ادارہ صحت کے مطابق امراضِ قلب دنیا بھر میں اموات کی سب سے بڑی وجہ ہیں۔ جدید تحقیق میں سٹینٹ اور بائی پاس سرجری کے علاوہ روبوٹک کارڈیک سرجری میں پیش رفت ہو رہی ہے۔",
+    prevention:["نمک اور چکنائی میں کمی", "باقاعدہ ورزش", "تمباکو نوشی سے پرہیز", "بلڈ پریشر اور کولیسٹرول کی باقاعدہ جانچ"]
+  },
+  {
+    id:"liver",
+    icon:"🫘",
+    label:"جگر",
+    eng:"Liver",
+    intro:"جگر جسم کا سب سے بڑا اندرونی عضو ہے جو خون صاف کرنے، زہریلے مادوں کو ختم کرنے، ہاضمے کے لیے پِت (Bile) بنانے اور غذائی اجزاء ذخیرہ کرنے کا کام دیتا ہے۔",
+    diseases:[
+      {name:"یرقان (Hepatitis)", text:"وائرل انفیکشن (ہیپاٹائٹس اے، بی، سی) سے جگر کی سوزش، جلد اور آنکھوں کا زرد ہونا۔"},
+      {name:"فیٹی لیور", text:"جگر میں چکنائی جمع ہونا، جو اکثر موٹاپے یا زیادہ الکوحل کے استعمال سے وابستہ ہے۔"},
+      {name:"جگر کا سکڑاؤ (Cirrhosis)", text:"طویل نقصان سے جگر کے خلیات کا مستقل زخم زدہ ہو جانا، جو جگر کی افعال کو شدید متاثر کرتا ہے۔"}
+    ],
+    research:"حالیہ تحقیق سے معلوم ہوا ہے کہ جگر میں خود کو دوبارہ تشکیل دینے (Regeneration) کی غیرمعمولی صلاحیت ہوتی ہے، جس پر ٹرانسپلانٹ اور سٹیم سیل تھراپی میں تحقیق جاری ہے۔",
+    prevention:["الکوحل سے پرہیز", "ہیپاٹائٹس بی ویکسینیشن", "متوازن غذا اور وزن کا کنٹرول", "غیر ضروری ادویات سے احتیاط"]
+  },
+  {
+    id:"stomach",
+    icon:"🍽",
+    label:"معدہ",
+    eng:"Stomach",
+    intro:"معدہ نظام ہاضمہ کا اہم حصہ ہے جہاں خوراک تیزاب اور انزائمز کی مدد سے ہضم ہونا شروع ہوتی ہے۔",
+    diseases:[
+      {name:"تیزابیت (Acidity/GERD)", text:"معدے کا تیزاب غذائی نالی میں واپس آنا، جس سے سینے میں جلن محسوس ہوتی ہے۔"},
+      {name:"معدے کا السر (Peptic Ulcer)", text:"معدے کی اندرونی جھلی پر زخم، جو اکثر H. pylori بیکٹیریا یا درد کش ادویات کے زیادہ استعمال سے ہوتا ہے۔"},
+      {name:"گیسٹرائٹس", text:"معدے کی اندرونی جھلی کی سوزش جو درد، متلی اور بھوک کی کمی کا باعث بنتی ہے۔"}
+    ],
+    research:"1980 کی دہائی میں H. pylori بیکٹیریا کی دریافت نے معدے کے السر کے علاج میں انقلاب برپا کیا، جس پر نوبل انعام بھی دیا گیا۔",
+    prevention:["وقت پر اور ہلکی غذا کا استعمال", "مسالہ دار و تیزابیت والی غذاؤں میں اعتدال", "درد کش ادویات کا زیادہ استعمال نہ کرنا", "کھانے کے بعد فوراً لیٹنے سے گریز"]
+  },
+  {
+    id:"kidney",
+    icon:"🫘",
+    label:"گردہ",
+    eng:"Kidney",
+    intro:"گردے خون کو صاف کر کے فاضل مادے اور اضافی پانی کو پیشاب کی صورت میں خارج کرتے ہیں، اور جسم میں نمکیات و پانی کا توازن برقرار رکھتے ہیں۔",
+    diseases:[
+      {name:"گردے کی پتھری", text:"معدنیات کے جمع ہونے سے پتھری بننا، جو شدید درد کا باعث بنتی ہے۔"},
+      {name:"گردوں کی ناکامی (Kidney Failure)", text:"گردوں کی خون صاف کرنے کی صلاحیت میں کمی، جو ذیابیطس یا ہائی بلڈ پریشر کی پیچیدگی کے طور پر ہو سکتی ہے۔"}
+    ],
+    research:"جدید تحقیق میں ڈائیلیسز ٹیکنالوجی اور گردے کی پیوند کاری میں بہتری کے ساتھ ساتھ مصنوعی گردے (Artificial Kidney) پر تحقیق جاری ہے۔",
+    prevention:["کافی پانی پینا", "نمک میں اعتدال", "ذیابیطس اور بلڈ پریشر کا کنٹرول", "غیر ضروری درد کش ادویات سے پرہیز"]
+  },
+  {
+    id:"pancreas",
+    icon:"🩸",
+    label:"لبلبہ",
+    eng:"Pancreas",
+    intro:"لبلبہ ہاضمے کے انزائمز اور انسولین ہارمون بنانے والا غدود ہے، جو شوگر کی سطح کو کنٹرول کرنے میں کلیدی کردار ادا کرتا ہے۔",
+    diseases:[
+      {name:"ذیابیطس (Diabetes)", text:"انسولین کی کمی یا مزاحمت کے باعث خون میں شوگر کی سطح بڑھ جانا۔"},
+      {name:"لبلبے کی سوزش (Pancreatitis)", text:"لبلبے کی اچانک یا دائمی سوزش، جو شدید پیٹ درد کا باعث بنتی ہے۔"}
+    ],
+    research:"ذیابیطس پر عالمی تحقیق میں مصنوعی لبلبہ (Artificial Pancreas) اور سٹیم سیل سے انسولین پیدا کرنے والے خلیات بنانے پر کام جاری ہے۔",
+    prevention:["متوازن غذا اور چینی میں کمی", "باقاعدہ ورزش", "الکوحل سے پرہیز", "شوگر کی باقاعدہ جانچ"]
+  },
+  {
+    id:"spleen",
+    icon:"🔴",
+    label:"تلی",
+    eng:"Spleen",
+    intro:"تلی مدافعتی نظام کا حصہ ہے جو پرانے خون کے خلیات کو فلٹر کرتی ہے اور انفیکشن سے لڑنے میں مدد دیتی ہے۔",
+    diseases:[
+      {name:"تلی کا بڑھ جانا (Splenomegaly)", text:"انفیکشن، جگر کی بیماری یا خون کے امراض کے باعث تلی کا حجم بڑھ جانا۔"}
+    ],
+    research:"تحقیق سے معلوم ہوا ہے کہ تلی کے بغیر بھی انسان زندہ رہ سکتا ہے، مگر انفیکشنز کے خلاف مزاحمت کمزور ہو جاتی ہے، اس لیے تلی نکلوانے کے بعد ویکسینیشن ضروری قرار دی جاتی ہے۔",
+    prevention:["پیٹ کے بائیں اوپری حصے میں درد کی صورت میں معالج سے رجوع", "متعدی امراض سے بروقت علاج", "کھیلوں میں پیٹ کی حفاظت"]
+  },
+  {
+    id:"intestines",
+    icon:"➰",
+    label:"آنتیں",
+    eng:"Intestines",
+    intro:"آنتیں (چھوٹی اور بڑی) نظام ہاضمہ کا طویل ترین حصہ ہیں جہاں غذائی اجزاء جذب ہوتے ہیں اور فضلہ تیار ہوتا ہے۔",
+    diseases:[
+      {name:"قبض و اسہال", text:"غذا، پانی کی کمی یا انفیکشن کے باعث آنتوں کی حرکت میں بے قاعدگی۔"},
+      {name:"چڑچڑی آنت کا سنڈروم (IBS)", text:"دائمی پیٹ درد، اپھارہ اور آنتوں کی عادات میں تبدیلی، جس کا تعلق ذہنی دباؤ سے بھی ہے۔"},
+      {name:"آنتوں کی سوزش (IBD)", text:"کروہنز ڈزیز اور السرٹیو کولائٹس جیسی دائمی سوزشی بیماریاں جو آنتوں کی جھلی کو متاثر کرتی ہیں۔"}
+    ],
+    research:"حالیہ تحقیق میں 'گٹ مائیکروبایوم' (آنتوں کے فائدہ مند بیکٹیریا) اور مجموعی صحت، مدافعتی نظام، حتیٰ کہ ذہنی صحت کے مابین گہرا تعلق دریافت ہوا ہے۔",
+    prevention:["فائبر سے بھرپور غذا", "کافی پانی پینا", "پروبائیوٹکس کا استعمال", "ذہنی دباؤ میں کمی"]
+  },
+  {
+    id:"bladder",
+    icon:"💧",
+    label:"مثانہ",
+    eng:"Bladder",
+    intro:"مثانہ پیشاب کو ذخیرہ کرنے والا عضو ہے جو گردوں سے آنے والے فاضل مادوں کو جسم سے خارج کرنے میں مدد دیتا ہے۔",
+    diseases:[
+      {name:"مثانے کا انفیکشن (UTI)", text:"بیکٹیریا کی وجہ سے مثانے میں سوزش، بار بار پیشاب آنا اور جلن محسوس ہونا۔"},
+      {name:"مثانے کی کمزوری (Overactive Bladder)", text:"پیشاب پر قابو رکھنے میں دشواری، جو عمر بڑھنے یا اعصابی مسائل سے وابستہ ہو سکتی ہے۔"}
+    ],
+    research:"یورولوجی تحقیق میں کم تکلیف دہ (Minimally Invasive) طریقہ ہائے علاج اور مثانے کی افعال بحال کرنے کے لیے نیورو موڈولیشن تھراپی پر کام ہو رہا ہے۔",
+    prevention:["کافی پانی پینا", "پیشاب زیادہ دیر روکنے سے گریز", "ذاتی صفائی کا خیال", "علامات برقرار رہنے پر معالج سے رجوع"]
+  }
+];
+
+/* ============================================================
+   RENDER MENU GRID
+   ============================================================ */
+const menuGrid = document.getElementById('menuGrid');
+ORGANS.forEach(o=>{
+  const tile = document.createElement('div');
+  tile.className = 'menu-tile';
+  tile.tabIndex = 0;
+  tile.innerHTML = `<div class="icon">${o.icon}</div><div class="label">${o.label}</div>`;
+  tile.addEventListener('click', ()=>openDetail(o.id));
+  tile.addEventListener('keypress', e=>{ if(e.key==='Enter') openDetail(o.id); });
+  menuGrid.appendChild(tile);
+});
+
+/* ============================================================
+   DETAIL VIEW LOGIC
+   ============================================================ */
+const menuView = document.getElementById('menuView');
+const detailView = document.getElementById('detailView');
+const detailIcon = document.getElementById('detailIcon');
+const detailTitle = document.getElementById('detailTitle');
+const detailEng = document.getElementById('detailEng');
+const detailBody = document.getElementById('detailBody');
+
+function openDetail(id){
+  const o = ORGANS.find(x=>x.id===id);
+  if(!o) return;
+
+  detailIcon.textContent = o.icon;
+  detailTitle.textContent = o.label;
+  detailEng.textContent = o.eng;
+
+  let diseasesHtml = o.diseases.map(d=>`
+    <div class="disease-block">
+      <h4>${d.name}</h4>
+      <p>${d.text}</p>
+    </div>
+  `).join('');
+
+  let preventHtml = o.prevention.map(p=>`<li>${p}</li>`).join('');
+
+  detailBody.innerHTML = `
+    <div class="card intro">
+      <h3><span class="tag"></span> تعارف</h3>
+      <p>${o.intro}</p>
+    </div>
+    <div class="card symptoms">
+      <h3><span class="tag"></span> عام امراض و علامات</h3>
+      ${diseasesHtml}
+    </div>
+    <div class="card research">
+      <h3><span class="tag"></span> سائنسی و طبی تحقیق</h3>
+      <p>${o.research}</p>
+    </div>
+    <div class="card prevent">
+      <h3><span class="tag"></span> احتیاطی تدابیر</h3>
+      <ul>${preventHtml}</ul>
+    </div>
+  `;
+
+  menuView.classList.add('hidden');
+  detailView.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+document.getElementById('backBtn').addEventListener('click', ()=>{
+  detailView.classList.remove('active');
+  menuView.classList.remove('hidden');
+  window.scrollTo(0,0);
+});
+</script>
+</body>
+</html>
