@@ -1,0 +1,61 @@
+name: Build APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v5
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v5
+      with:
+        node-version: '18'
+    
+    - name: Install Cordova
+      run: |
+        npm install -g cordova
+        npm install -g cordova-android
+    
+    - name: Create Cordova Project
+      run: |
+        cordova create MyApp com.qariclinic.anatomy "انسانی اعضاء"
+        cd MyApp
+        cordova platform add android
+    
+    - name: Copy HTML files
+      run: |
+        # ڈیفالٹ فائل کو ہٹائیں
+        rm -f MyApp/www/index.html
+        
+        # اپنی index.html کو کاپی کریں
+        if [ -f "index.html" ]; then
+          cp index.html MyApp/www/index.html
+          echo "✅ index.html کاپی ہو گئی"
+        else
+          echo "⚠️ index.html نہیں ملی، ڈیفالٹ بنا رہے ہیں"
+          echo "<h1>انسانی اعضاء</h1><p>HTML فائل نہیں ملی</p>" > MyApp/www/index.html
+        fi
+        
+        # باقی تمام فائلیں کاپی کریں (CSS, JS, Images)
+        cp -r ./* MyApp/www/ 2>/dev/null || true
+        echo "✅ تمام فائلیں کاپی ہو گئیں"
+    
+    - name: Build APK
+      run: |
+        cd MyApp
+        cordova build android
+        echo "✅ APK بن گیا"
+    
+    - name: Upload APK
+      uses: actions/upload-artifact@v5
+      with:
+        name: Human-Anatomy-APK
+        path: MyApp/platforms/android/app/build/outputs/apk/debug/app-debug.apk
+        retention-days: 30
